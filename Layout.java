@@ -93,9 +93,8 @@ public class Layout {
         topHBoxChildren.addAll();
 
         /*---------- CENTER HBOX OF VBOXs----------*/
-        buildings = new ArrayList<VBox>();
-
         center = new GridPane();
+        buildings = new ArrayList<VBox>();
         for(int i=0;i<3;i++) buildings.add(new VBox());
         center.add(buildings.get(0), 0,0,1,1);
         center.add(buildings.get(1), 1,0,1,1);

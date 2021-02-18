@@ -7,10 +7,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javax.swing.*;
@@ -35,7 +32,8 @@ public class Controller {
         FILLED=0;
     }
 
-    public void setActionBuildingCount(Button b, int cnt, BorderPane BPane){
+    public void setActionBuildingCount(Button b, int cnt, BorderPane BPane, GridPane center,
+                                       ArrayList<VBox> buildings, ArrayList<Button> buildingButtons){
         b.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -57,6 +55,42 @@ public class Controller {
                 ObservableList topHBoxChildren = topHBox.getChildren();
                 topHBoxChildren.addAll();
                 BPane.setTop(topHBox);
+
+                /*---------- MAKE NEW BUTTONS ----------*/
+                buildingButtons.clear();
+
+                /*---------- SET CENTER ----------*/
+                center.getChildren().clear();
+                buildings.clear();
+                for(int i=0;i<cnt;i++) buildings.add(new VBox());
+                for(int i=0;i<cnt;i++) center.add(buildings.get(i),i,0,1,1);
+                for(int i=0;i<cnt;i++) GridPane.setVgrow(buildings.get(i), Priority.ALWAYS);
+
+                ArrayList<ColumnConstraints> columnConstraints = new ArrayList<ColumnConstraints>();
+                for(int i=0;i<cnt;i++) columnConstraints.add(new ColumnConstraints());
+                for(int i=0;i<cnt;i++) columnConstraints.get(i).setPercentWidth(100/cnt);
+
+                center.getColumnConstraints().addAll(columnConstraints);
+                center.setPrefWidth(400);
+
+                /*---------- CONTROLLER ----------*/
+                for(int i=0;i<cnt;i++) {
+                    int finalI = i;
+                    btn.get(i).setOnAction(new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent event) {
+                            buildings.get(finalI).setAlignment(Pos.BOTTOM_RIGHT);
+                            Button b = new Button("Empty");
+                            b.setMinSize(10,50);
+                            b.setMaxSize(200,200);
+                            b.setPrefSize(200,50);
+                            buildings.get(finalI).getChildren().add(b);
+                            //buildings.get(finalI).setSpacing(0);
+                        }
+                    });
+
+                }
+                BPane.setCenter(center);
             }
         });
     }
@@ -82,6 +116,7 @@ public class Controller {
             }
         });
     }
+
     public void setActionBuild(Button btn, VBox vbox){
         btn.setOnAction(new EventHandler<ActionEvent>() {
             @Override

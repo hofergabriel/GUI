@@ -78,7 +78,7 @@ public class Layout {
         VBox leftVBox = new VBox();
         ObservableList leftVBoxChildren = leftVBox.getChildren();
         leftVBoxChildren.addAll(rentToCollect, maintenance, filled);
-        leftVBox.setMargin(rentToCollect, new Insets(0,10,0,0));
+        leftVBox.setMargin(rentToCollect, new Insets(0,15,0,0));
 
         /*---------- BOTTOM VBOX ----------*/
         VBox bottomVBox = new VBox();
@@ -111,9 +111,7 @@ public class Layout {
         col2.setPercentWidth(33);
         col3.setPercentWidth(33);
         center.getColumnConstraints().addAll(col1,col2,col3);
-
         center.setPrefWidth(400);
-
 
         /*---------- make BORDERPANE ----------*/
         BorderPane BPane = new BorderPane();
@@ -128,9 +126,9 @@ public class Layout {
 
         /*----------------------------------------------------------------------------------*/
         /*---------- CONTROLLER STUFF ----------*/
-        controller.setActionBuildingCount(threeBuildings,3, BPane);
-        controller.setActionBuildingCount(fourBuildings,4, BPane);
-        controller.setActionBuildingCount(fiveBuildings,5, BPane);
+        controller.setActionBuildingCount(threeBuildings,3, BPane,center,buildings,buildingButtons);
+        controller.setActionBuildingCount(fourBuildings,4, BPane,center,buildings,buildingButtons);
+        controller.setActionBuildingCount(fiveBuildings,5, BPane,center,buildings,buildingButtons);
         controller.setActionNewMonth(newMonth, month);
 
         controller.setActionBuild(buildingButtons.get(0), buildings.get(0));

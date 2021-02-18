@@ -3,6 +3,7 @@ import javafx.beans.binding.Bindings;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -47,30 +48,43 @@ public class Controller {
                     b.setText("Build");
                     btn.add(b);
                 }
-                if(cnt==3) { topHBox = new HBox(btn.get(0), btn.get(1), btn.get(2)); }
-                else if(cnt==4) { topHBox = new HBox(btn.get(0), btn.get(1), btn.get(2), btn.get(3)); }
-                else { topHBox = new HBox(btn.get(0), btn.get(1), btn.get(2), btn.get(3), btn.get(4)); }
+                if(cnt==3) topHBox = new HBox(btn.get(0), btn.get(1), btn.get(2));
+                else if(cnt==4) topHBox = new HBox(btn.get(0), btn.get(1), btn.get(2), btn.get(3));
+                else topHBox = new HBox(btn.get(0), btn.get(1), btn.get(2), btn.get(3), btn.get(4));
                 topHBox.setMargin(btn.get(0), new Insets(0,0,0,100));
                 topHBox.setMargin(btn.get(btn.size()-1), new Insets(0,150,0,0));
                 ObservableList topHBoxChildren = topHBox.getChildren();
                 topHBoxChildren.addAll();
                 BPane.setTop(topHBox);
 
-                /*---------- MAKE NEW BUTTONS ----------*/
-                buildingButtons.clear();
-
                 /*---------- SET CENTER ----------*/
                 center.getChildren().clear();
+                center.getColumnConstraints().clear();
+                center.setGridLinesVisible(true);
                 buildings.clear();
+                buildingButtons.clear();
+
+                center.setGridLinesVisible( true );
+
+                final int numCols = cnt;
                 for(int i=0;i<cnt;i++) buildings.add(new VBox());
+                //for(int i=0;i<cnt;i++) GridPane.setFillWidth(buildings.get(i), true);
+                //for(int i=0;i<cnt;i++) GridPane.setFillHeight(buildings.get(i), true);
+
                 for(int i=0;i<cnt;i++) center.add(buildings.get(i),i,0,1,1);
                 for(int i=0;i<cnt;i++) GridPane.setVgrow(buildings.get(i), Priority.ALWAYS);
 
                 ArrayList<ColumnConstraints> columnConstraints = new ArrayList<ColumnConstraints>();
-                for(int i=0;i<cnt;i++) columnConstraints.add(new ColumnConstraints());
-                for(int i=0;i<cnt;i++) columnConstraints.get(i).setPercentWidth(100/cnt);
+                //for(int i=0;i<cnt;i++) columnConstraints.add(new ColumnConstraints());
+                //for(int i=0;i<cnt;i++) columnConstraints.get(i).setPercentWidth(100/cnt);
+                //for(int i=0;i<cnt;i++) center.getColumnConstraints().add(columnConstraints.get(i));
+                System.out.println("cnt: "+cnt);
+                for(int i=0;i<cnt;i++) {
+                    ColumnConstraints cc = new ColumnConstraints();
+                    cc.setPercentWidth(100.00/numCols);
+                    center.getColumnConstraints().add(cc);
+                }
 
-                center.getColumnConstraints().addAll(columnConstraints);
                 center.setPrefWidth(400);
 
                 /*---------- CONTROLLER ----------*/
@@ -82,10 +96,9 @@ public class Controller {
                             buildings.get(finalI).setAlignment(Pos.BOTTOM_RIGHT);
                             Button b = new Button("Empty");
                             b.setMinSize(10,50);
-                            b.setMaxSize(200,200);
-                            b.setPrefSize(200,50);
+                            b.setMaxSize(400,200);
+                            b.setPrefSize(400,50);
                             buildings.get(finalI).getChildren().add(b);
-                            //buildings.get(finalI).setSpacing(0);
                         }
                     });
 

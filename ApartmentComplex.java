@@ -31,25 +31,21 @@ public class ApartmentComplex {
             System.out.println("cols: "+apartments.get(i).size());
             for(int j=0;j<apartments.get(i).size();j++){
                 System.out.println("rent!: "+apartments.get(i).get(j).getRent());
-                if(apartments.get(i).get(j) instanceof Empty)
-                    System.out.println("EMPTY");
-                if(apartments.get(i).get(j) instanceof Basic)
-                    System.out.println("BASIC");
-                if(apartments.get(i).get(j) instanceof Penthouse)
-                    System.out.println("PENTHOUSE");
 
                 ObservableList<Button> children = (ObservableList) buildings.get(i).getChildren();
                 children.get(j).setText("gabedean!");
-                apartments.get(i).get(j).getRent();
-                apartments.get(i).get(j).getDuration();
-
-
+                int rent = apartments.get(i).get(j).getRent();
+                int time = apartments.get(i).get(j).getDuration();
+                if(apartments.get(i).get(j) instanceof Empty) children.get(j).setText("Empty");
+                if(apartments.get(i).get(j) instanceof Basic)
+                    children.get(j).setText("Basic\nRent: "+rent+"\nDuration: "+time);
+                if(apartments.get(i).get(j) instanceof Penthouse)
+                    children.get(j).setText("Penthouse\nRent: "+rent+"\nDuration: "+time);
 
             }
         }
 
     }
-
 
     public ApartmentComplex(){ }
     public void clearApartmentComplex(){ apartments.clear(); }

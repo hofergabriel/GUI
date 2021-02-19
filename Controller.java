@@ -8,6 +8,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
@@ -15,26 +17,20 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 import static java.awt.Color.*;
 
 
 /* Put event handlers here */
 public class Controller {
-    private ApartmentComplex apartmentComplex;
-    private int MONTH;
-    private int FUNDS;
-    private int RENTTOCOLLECT;
-    private int FILLED;
-    public Controller(){
-        apartmentComplex = new ApartmentComplex();
-        MONTH=0;
-        FUNDS=20000;
-        RENTTOCOLLECT=0;
-        FILLED=0;
-    }
+    private ApartmentComplex apartmentComplex = new ApartmentComplex();
+    private int MONTH=0, FUNDS=20000, RENTTOCOLLECT=0, FILLED=0;
 
-    public void setActionBuildingCount(Button b, int cnt, BorderPane BPane, GridPane center,
-                                       ArrayList<VBox> buildings, ArrayList<Button> buildingButtons){
+    public Controller(){ }
+
+    public void setActionBuildingCount(
+            Button b, int cnt, BorderPane BPane, GridPane center,
+            ArrayList<VBox> buildings, ArrayList<Button> buildingButtons, ToggleGroup group){
         b.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -60,32 +56,22 @@ public class Controller {
                 /*---------- SET CENTER ----------*/
                 center.getChildren().clear();
                 center.getColumnConstraints().clear();
-                center.setGridLinesVisible(true);
                 buildings.clear();
                 buildingButtons.clear();
+                center.setGridLinesVisible(true);
 
-                center.setGridLinesVisible( true );
-
-                final int numCols = cnt;
                 for(int i=0;i<cnt;i++) buildings.add(new VBox());
-                //for(int i=0;i<cnt;i++) GridPane.setFillWidth(buildings.get(i), true);
-                //for(int i=0;i<cnt;i++) GridPane.setFillHeight(buildings.get(i), true);
-
                 for(int i=0;i<cnt;i++) center.add(buildings.get(i),i,0,1,1);
                 for(int i=0;i<cnt;i++) GridPane.setVgrow(buildings.get(i), Priority.ALWAYS);
 
                 ArrayList<ColumnConstraints> columnConstraints = new ArrayList<ColumnConstraints>();
-                //for(int i=0;i<cnt;i++) columnConstraints.add(new ColumnConstraints());
-                //for(int i=0;i<cnt;i++) columnConstraints.get(i).setPercentWidth(100/cnt);
-                //for(int i=0;i<cnt;i++) center.getColumnConstraints().add(columnConstraints.get(i));
-                System.out.println("cnt: "+cnt);
-                for(int i=0;i<cnt;i++) {
-                    ColumnConstraints cc = new ColumnConstraints();
-                    cc.setPercentWidth(100.00/numCols);
-                    center.getColumnConstraints().add(cc);
-                }
+                for(int i=0;i<cnt;i++) columnConstraints.add(new ColumnConstraints());
+                for(int i=0;i<cnt;i++) columnConstraints.get(i).setPercentWidth(100/cnt);
+                for(int i=0;i<cnt;i++) center.getColumnConstraints().add(columnConstraints.get(i));
 
-                center.setPrefWidth(400);
+                /*---------- FLOORS ----------*/
+                apartmentComplex.clearApartmentComplex();
+                for(int i=0;i<cnt;i++) apartmentComplex.addBuilding();
 
                 /*---------- CONTROLLER ----------*/
                 for(int i=0;i<cnt;i++) {
@@ -93,8 +79,19 @@ public class Controller {
                     btn.get(i).setOnAction(new EventHandler<ActionEvent>() {
                         @Override
                         public void handle(ActionEvent event) {
+
+                            /*---------- ADD FLOOR/APARTMENT ----------*/
+                            System.out.println("1radio: "+group.getSelectedToggle());
+                            String txt = ((RadioButton) group.getSelectedToggle()).getText();
+                            if(txt=="Empty") apartmentComplex.addApartment(finalI, new Empty());
+                            if(txt=="Basic") apartmentComplex.addApartment(finalI, new Basic());
+                            if(txt=="Penthouse") apartmentComplex.addApartment(finalI, new Penthouse());
+
                             buildings.get(finalI).setAlignment(Pos.BOTTOM_RIGHT);
-                            Button b = new Button("Empty");
+                            Button b = new Button();
+                            if(txt=="Empty") b.setText("Empty");
+                            if(txt=="Basic") b.setText("Basic");
+                            if(txt=="Penthouse") b.setText("Penthouse");
                             b.setMinSize(10,50);
                             b.setMaxSize(400,200);
                             b.setPrefSize(400,50);
@@ -107,18 +104,7 @@ public class Controller {
             }
         });
     }
-/*
-    public void setActionIncreaseRent(){
-        newMonth.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                MONTH+=1;
-                String txt = "Month: "+String.valueOf(MONTH);
-                month.setText(txt);
-            }
-        });
-    }
-*/
+
     public void setActionNewMonth(Button newMonth, Text month){
         newMonth.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -145,4 +131,22 @@ public class Controller {
         });
     }
 
+    /*
+    public void setActionIncreaseRent(){
+        newMonth.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                MONTH+=1;
+                String txt = "Month: "+String.valueOf(MONTH);
+                month.setText(txt);
+            }
+        });
+    }
+    */
+
+
 }
+
+
+//for(int i=0;i<cnt;i++) GridPane.setFillWidth(buildings.get(i), true);
+//for(int i=0;i<cnt;i++) GridPane.setFillHeight(buildings.get(i), true);

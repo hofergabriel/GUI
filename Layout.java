@@ -1,10 +1,7 @@
 package hofer_gabriel;
 
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
@@ -20,6 +17,11 @@ public class Layout {
     private ArrayList<VBox> buildings;
     private GridPane center;
     private ArrayList<Button> buildingButtons;
+    private RadioButton button1 = new RadioButton("Empty");
+    private RadioButton button2 = new RadioButton("Basic");
+    private RadioButton button3 = new RadioButton("Penthouse");
+    private ToggleGroup group;
+
     public Layout(Stage primaryStage){
         controller = new Controller();
 
@@ -39,13 +41,13 @@ public class Layout {
         Button increaseRentButton = new Button();
         TextField increaseRentTextfield = new TextField("23");
 
-        ToggleGroup group = new ToggleGroup();
-        RadioButton button1 = new RadioButton("Empty");
-        RadioButton button2 = new RadioButton("Basic");
-        RadioButton button3 = new RadioButton("Penthouse");
+        group = new ToggleGroup();
+        System.out.println("radio0: "+group);
         button1.setToggleGroup(group);
         button2.setToggleGroup(group);
         button3.setToggleGroup(group);
+        button1.setSelected(true);
+        System.out.println("radio0: "+group.getSelectedToggle());
 
         Button threeBuildings = new Button();
         Button fourBuildings = new Button();
@@ -125,9 +127,11 @@ public class Layout {
 
         /*----------------------------------------------------------------------------------*/
         /*---------- CONTROLLER STUFF ----------*/
-        controller.setActionBuildingCount(threeBuildings,3, BPane,center,buildings,buildingButtons);
-        controller.setActionBuildingCount(fourBuildings,4, BPane,center,buildings,buildingButtons);
-        controller.setActionBuildingCount(fiveBuildings,5, BPane,center,buildings,buildingButtons);
+
+
+        controller.setActionBuildingCount(threeBuildings,3, BPane,center,buildings,buildingButtons,group);
+        controller.setActionBuildingCount(fourBuildings,4, BPane,center,buildings,buildingButtons,group);
+        controller.setActionBuildingCount(fiveBuildings,5, BPane,center,buildings,buildingButtons,group);
         controller.setActionNewMonth(newMonth, month);
 
         controller.setActionBuild(buildingButtons.get(0), buildings.get(0));
@@ -135,4 +139,3 @@ public class Layout {
         controller.setActionBuild(buildingButtons.get(2), buildings.get(2));
 
     }
-}

@@ -1,4 +1,8 @@
 package hofer_gabriel;
+import javafx.collections.ObservableList;
+import javafx.scene.control.Button;
+import javafx.scene.layout.VBox;
+
 import java.util.ArrayList;
 
 public class ApartmentComplex {
@@ -12,6 +16,7 @@ public class ApartmentComplex {
             }
         }
     }
+
     public void newMonth(){
         for(int i=0;i<apartments.size();i++){
             for(int j=0;j<apartments.get(i).size();j++){
@@ -19,7 +24,8 @@ public class ApartmentComplex {
             }
         }
     }
-    public void showRents(){
+
+    public void updateView(ArrayList<VBox> buildings){
         System.out.println("rows: "+apartments.size());
         for(int i=0;i<apartments.size();i++){
             System.out.println("cols: "+apartments.get(i).size());
@@ -31,6 +37,14 @@ public class ApartmentComplex {
                     System.out.println("BASIC");
                 if(apartments.get(i).get(j) instanceof Penthouse)
                     System.out.println("PENTHOUSE");
+
+                ObservableList<Button> children = (ObservableList) buildings.get(i).getChildren();
+                children.get(j).setText("gabedean!");
+                apartments.get(i).get(j).getRent();
+                apartments.get(i).get(j).getDuration();
+
+
+
             }
         }
 

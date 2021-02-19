@@ -1,25 +1,14 @@
 package hofer_gabriel;
-import javafx.beans.binding.Bindings;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.*;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-import javax.swing.*;
-//import java.awt.*;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Objects;
-import static java.awt.Color.*;
 
 
 /* Put event handlers here */
@@ -77,27 +66,37 @@ public class Controller {
                 int finalI = i;
                 btn.get(i).setOnAction(event1 -> {
                     /*---------- ADD FLOOR/APARTMENT ----------*/
-                    System.out.println("1radio: "+group.getSelectedToggle());
-                    String txt = ((RadioButton) group.getSelectedToggle()).getText();
-
-                    Empty E=null; Basic B=null; Penthouse P=null;
-                    if(txt=="Empty") apartmentComplex.addApartment(finalI, E=new Empty());
-                    if(txt=="Basic") apartmentComplex.addApartment(finalI, B=new Basic());
-                    if(txt=="Penthouse") apartmentComplex.addApartment(finalI, P=new Penthouse());
+                    Apartment A;
+                    apartmentComplex.addApartment(finalI, A=new Empty());
 
                     buildings.get(finalI).setAlignment(Pos.BOTTOM_RIGHT);
                     Button b1 = new Button();
                     b1.setText("Empty");
-                    Basic finalB = B;
-                    Penthouse finalP = P;
-                    b1.setOnAction(event2 -> {
-                        String txt2 = ((RadioButton) group.getSelectedToggle()).getText();
+                    Apartment finalA1 = A;
+                    int currentheight = apartmentComplex.getBuildingHeight(finalI)-1;
 
-                        if(txt2=="Empty") b1.setText("Empty");
-                        if(txt2=="Basic") b1.setText("Basic\nDuration: 0\nRent: 0");
-                        if(txt2=="Penthouse") b1.setText("Penthouse"); //\nDuration: "+ finalP.getRent()+"\nRent: "+ finalP.getRent());
-                        System.out.println("remodeling");
-                        System.out.println("txt: "+txt2);
+                    b1.setOnAction(event2 -> {
+                        int heightbefore = apartmentComplex.getBuildingHeight(finalI)-1;
+                        String txt = ((RadioButton) group.getSelectedToggle()).getText();
+                        System.out.println("heightbefore: "+heightbefore);
+                        System.out.println("currentheight: "+currentheight+"\n");
+
+                        if(txt=="Empty") {
+                            b1.setText("Empty");
+                            Apartment A2 = new Empty();
+                            apartmentComplex.setApartment(finalI,currentheight,A2);
+                        }
+                        if(txt=="Basic") {
+                            b1.setText("Basic\nDuration: " + finalA1.getDuration() + "\nRent: " + finalA1.getRent());
+                            Apartment A2 = new Basic();
+                            apartmentComplex.setApartment(finalI,currentheight,A2);
+                        }
+                        if(txt=="Penthouse") {
+                            b1.setText("Penthouse\nDuration: " + finalA1.getDuration() + "\nRent: " + finalA1.getRent());
+                            Apartment A2 = new Penthouse();
+                            apartmentComplex.setApartment(finalI,currentheight,A2);
+                        }
+                        apartmentComplex.updateView(buildings);
 
                     });
 
@@ -109,15 +108,6 @@ public class Controller {
 
             }
             BPane.setCenter(center);
-        });
-    }
-
-    /* UPDATE THE MONTH */
-    public void setActionNewMonth(Button newMonth, Text month){
-        newMonth.setOnAction(event -> {
-            MONTH+=1;
-            String txt = "Month: "+String.valueOf(MONTH);
-            month.setText(txt);
         });
     }
 
@@ -138,14 +128,24 @@ public class Controller {
     public void setActionIncreaseRent(Button increaseRentButton, TextField increaseRentTextField, ArrayList<VBox> buildings){
         /* MAP INDIVIDUAL views to their corresponding model */
         increaseRentButton.setOnAction(event -> {
-            System.out.println("increase rent by: "+increaseRentTextField.getText());
             apartmentComplex.increaseRent(Integer.parseInt(increaseRentTextField.getText()));
             apartmentComplex.updateView(buildings);
         });
     }
 
+    /* UPDATE THE MONTH */
+    public void setActionNewMonth(Button newMonth, Text month, ArrayList<VBox> buildings){
+        newMonth.setOnAction(event -> {
+            MONTH+=1;
+            String txt = "Month: "+String.valueOf(MONTH);
+            month.setText(txt);
+            apartmentComplex.newMonth(buildings);
+            apartmentComplex.updateView(buildings);
+        });
+    }
+
+
+
 }
 
 
-//for(int i=0;i<cnt;i++) GridPane.setFillWidth(buildings.get(i), true);
-//for(int i=0;i<cnt;i++) GridPane.setFillHeight(buildings.get(i), true);

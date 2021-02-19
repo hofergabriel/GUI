@@ -16,7 +16,7 @@ public class Layout {
     private Controller controller;
     private ArrayList<VBox> buildings;
     private GridPane center;
-    private ArrayList<Button> buildingButtons;
+    private ArrayList<Button> buildButtons;
     private RadioButton button1 = new RadioButton("Empty");
     private RadioButton button2 = new RadioButton("Basic");
     private RadioButton button3 = new RadioButton("Penthouse");
@@ -26,14 +26,14 @@ public class Layout {
         controller = new Controller();
 
         /*---------- BUILD BUTTONS ----------*/
-        buildingButtons = new ArrayList<Button>();
+        buildButtons = new ArrayList<Button>();
         for(int i=0;i<3;i++){
             Button b = new Button();
             b.setMinSize(50,30);
             b.setMaxSize(500,30);
             b.setPrefSize(500,30);
             b.setText("Build");
-            buildingButtons.add(b);
+            buildButtons.add(b);
         }
 
         /*---------- RIGHT BUTTONS & TEXT ----------*/
@@ -88,9 +88,9 @@ public class Layout {
         bottomVBoxChildren.addAll(month, funds);
 
         /*---------- TOP HBOX ----------*/
-        HBox topHBox = new HBox(buildingButtons.get(0), buildingButtons.get(1), buildingButtons.get(2));
-        topHBox.setMargin(buildingButtons.get(0), new Insets(0,0,0,100));
-        topHBox.setMargin(buildingButtons.get(buildingButtons.size()-1), new Insets(0,150,0,0));
+        HBox topHBox = new HBox(buildButtons.get(0), buildButtons.get(1), buildButtons.get(2));
+        topHBox.setMargin(buildButtons.get(0), new Insets(0,0,0,100));
+        topHBox.setMargin(buildButtons.get(buildButtons.size()-1), new Insets(0,150,0,0));
         ObservableList topHBoxChildren = topHBox.getChildren();
         topHBoxChildren.addAll();
 
@@ -128,14 +128,21 @@ public class Layout {
         /*----------------------------------------------------------------------------------*/
         /*---------- CONTROLLER STUFF ----------*/
 
-
-        controller.setActionBuildingCount(threeBuildings,3, BPane,center,buildings,buildingButtons,group);
-        controller.setActionBuildingCount(fourBuildings,4, BPane,center,buildings,buildingButtons,group);
-        controller.setActionBuildingCount(fiveBuildings,5, BPane,center,buildings,buildingButtons,group);
+        controller.setActionBuildingCount(threeBuildings,3, BPane,center,buildings,buildButtons,group);
+        controller.setActionBuildingCount(fourBuildings,4, BPane,center,buildings,buildButtons,group);
+        controller.setActionBuildingCount(fiveBuildings,5, BPane,center,buildings,buildButtons,group);
         controller.setActionNewMonth(newMonth, month);
 
-        controller.setActionBuild(buildingButtons.get(0), buildings.get(0));
-        controller.setActionBuild(buildingButtons.get(1), buildings.get(1));
-        controller.setActionBuild(buildingButtons.get(2), buildings.get(2));
+        controller.setActionBuild(buildButtons.get(0), buildings.get(0));
+        controller.setActionBuild(buildButtons.get(1), buildings.get(1));
+        controller.setActionBuild(buildButtons.get(2), buildings.get(2));
+
+        controller.setActionIncreaseRent(increaseRentButton, increaseRentTextfield);
 
     }
+
+}
+
+
+
+

@@ -79,27 +79,31 @@ public class Controller {
                     /*---------- ADD FLOOR/APARTMENT ----------*/
                     System.out.println("1radio: "+group.getSelectedToggle());
                     String txt = ((RadioButton) group.getSelectedToggle()).getText();
-                    if(txt=="Empty\nRent: ") apartmentComplex.addApartment(finalI, new Empty());
-                    if(txt=="Basic\nRent: ") apartmentComplex.addApartment(finalI, new Basic());
-                    if(txt=="Penthouse\nRent: ") apartmentComplex.addApartment(finalI, new Penthouse());
+
+                    Empty E=null; Basic B=null; Penthouse P=null;
+                    if(txt=="Empty") apartmentComplex.addApartment(finalI, E=new Empty());
+                    if(txt=="Basic") apartmentComplex.addApartment(finalI, B=new Basic());
+                    if(txt=="Penthouse") apartmentComplex.addApartment(finalI, P=new Penthouse());
 
                     buildings.get(finalI).setAlignment(Pos.BOTTOM_RIGHT);
                     Button b1 = new Button();
                     b1.setText("Empty");
+                    Basic finalB = B;
+                    Penthouse finalP = P;
                     b1.setOnAction(event2 -> {
                         String txt2 = ((RadioButton) group.getSelectedToggle()).getText();
 
                         if(txt2=="Empty") b1.setText("Empty");
-                        if(txt2=="Basic") b1.setText("Basic");
-                        if(txt2=="Penthouse") b1.setText("Penthouse");
+                        if(txt2=="Basic") b1.setText("Basic\nDuration: 0\nRent: 0");
+                        if(txt2=="Penthouse") b1.setText("Penthouse"); //\nDuration: "+ finalP.getRent()+"\nRent: "+ finalP.getRent());
                         System.out.println("remodeling");
                         System.out.println("txt: "+txt2);
+
                     });
 
-
-                    b1.setMinSize(10,50);
+                    b1.setMinSize(10,60);
                     b1.setMaxSize(400,200);
-                    b1.setPrefSize(400,50);
+                    b1.setPrefSize(400,60);
                     buildings.get(finalI).getChildren().add(0, b1);
                 });
 
@@ -131,12 +135,12 @@ public class Controller {
     }
 
     /* INCREASE THE RENT */
-    public void setActionIncreaseRent(Button increaseRentButton, TextField increaseRentTextField){
+    public void setActionIncreaseRent(Button increaseRentButton, TextField increaseRentTextField, ArrayList<VBox> buildings){
         /* MAP INDIVIDUAL views to their corresponding model */
         increaseRentButton.setOnAction(event -> {
             System.out.println("increase rent by: "+increaseRentTextField.getText());
             apartmentComplex.increaseRent(Integer.parseInt(increaseRentTextField.getText()));
-            apartmentComplex.showRents();
+            apartmentComplex.updateView(buildings);
         });
     }
 

@@ -19,7 +19,7 @@ public class Controller {
     public void setActionBuildingCount(
             Button b, int cnt, BorderPane BPane, GridPane center,
             ArrayList<VBox> buildings, ArrayList<Button> buildingButtons,
-            ToggleGroup group){
+            ToggleGroup group, Text funds, Text filled, Text rentToCollect, Text maintenance){
 
         b.setOnAction(event -> {
             ArrayList<Button> btn = new ArrayList<Button>();
@@ -76,25 +76,45 @@ public class Controller {
                     int currentheight = apartmentComplex.getBuildingHeight(finalI)-1;
 
                     b1.setOnAction(event2 -> {
-                        int heightbefore = apartmentComplex.getBuildingHeight(finalI)-1;
                         String txt = ((RadioButton) group.getSelectedToggle()).getText();
-                        System.out.println("heightbefore: "+heightbefore);
-                        System.out.println("currentheight: "+currentheight+"\n");
-
                         if(txt=="Empty") {
                             b1.setText("Empty");
                             Apartment A2 = new Empty();
+                            A2.setRent(0);
+                            A2.setMaintenance(200);
                             apartmentComplex.setApartment(finalI,currentheight,A2);
+
+                            apartmentComplex.updateCollectRent();
+                            rentToCollect.setText("Collect: "+apartmentComplex.getCOLLECTRENT());
+                            apartmentComplex.updateMaintenance();
+                            maintenance.setText("Maintenance: "+apartmentComplex.getMAINTENANCE());
+
                         }
                         if(txt=="Basic") {
                             b1.setText("Basic\nDuration: " + finalA1.getDuration() + "\nRent: " + finalA1.getRent());
                             Apartment A2 = new Basic();
+                            A2.setRent(800);
+                            A2.setMaintenance(450);
                             apartmentComplex.setApartment(finalI,currentheight,A2);
+
+                            apartmentComplex.updateCollectRent();
+                            rentToCollect.setText("Collect: "+apartmentComplex.getCOLLECTRENT());
+                            apartmentComplex.updateMaintenance();
+                            maintenance.setText("Maintenance: "+apartmentComplex.getMAINTENANCE());
+
                         }
                         if(txt=="Penthouse") {
                             b1.setText("Penthouse\nDuration: " + finalA1.getDuration() + "\nRent: " + finalA1.getRent());
                             Apartment A2 = new Penthouse();
+                            A2.setRent(2000);
+                            A2.setMaintenance(1000);
                             apartmentComplex.setApartment(finalI,currentheight,A2);
+
+                            apartmentComplex.updateCollectRent();
+                            rentToCollect.setText("Collect: "+apartmentComplex.getCOLLECTRENT());
+                            apartmentComplex.updateMaintenance();
+                            maintenance.setText("Maintenance: "+apartmentComplex.getMAINTENANCE());
+
                         }
                         apartmentComplex.updateView(buildings);
 
@@ -104,6 +124,13 @@ public class Controller {
                     b1.setMaxSize(400,200);
                     b1.setPrefSize(400,60);
                     buildings.get(finalI).getChildren().add(0, b1);
+
+                    apartmentComplex.newEmptyUpdateFunds();
+                    funds.setText("Funds: "+apartmentComplex.getFUNDS());
+
+                    apartmentComplex.updateFILLED();
+                    filled.setText("Filled: "+apartmentComplex.getFILLED());
+
                 });
 
             }
@@ -112,7 +139,7 @@ public class Controller {
     }
 
     /* BUILD BUTTONS */
-    public void setActionBuild(Button btn, VBox vbox){
+    public void setActionBuild(Button btn, VBox vbox, ArrayList<VBox> buildings,Text funds){
         btn.setOnAction(event -> {
             vbox.setAlignment(Pos.BOTTOM_RIGHT);
             Button b = new Button("Empty");
@@ -121,6 +148,10 @@ public class Controller {
             b.setPrefSize(200,50);
             vbox.getChildren().add(b);
             vbox.setSpacing(0);
+            apartmentComplex.updateView(buildings);
+
+            apartmentComplex.updateFunds(buildings);
+            funds.setText("Funds: "+apartmentComplex.getFUNDS());
         });
     }
 
@@ -134,18 +165,23 @@ public class Controller {
     }
 
     /* UPDATE THE MONTH */
-    public void setActionNewMonth(Button newMonth, Text month, ArrayList<VBox> buildings){
+    public void setActionNewMonth(Button newMonth, Text month, ArrayList<VBox> buildings, Text funds,
+         Text rentToCollect, Text maintenance){
         newMonth.setOnAction(event -> {
             MONTH+=1;
             String txt = "Month: "+String.valueOf(MONTH);
             month.setText(txt);
             apartmentComplex.newMonth(buildings);
+            apartmentComplex.updateFunds(buildings);
+            funds.setText("Funds: "+apartmentComplex.getFUNDS());
+            apartmentComplex.updateCollectRent();
+            rentToCollect.setText("Collect: "+apartmentComplex.getCOLLECTRENT());
+            apartmentComplex.updateMaintenance();
+            maintenance.setText("Maintenance: "+apartmentComplex.getMAINTENANCE());
+
             apartmentComplex.updateView(buildings);
         });
     }
-
-
-
 }
 
 

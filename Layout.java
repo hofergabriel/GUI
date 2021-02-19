@@ -42,12 +42,10 @@ public class Layout {
         TextField increaseRentTextfield = new TextField("23");
 
         group = new ToggleGroup();
-        System.out.println("radio0: "+group);
         button1.setToggleGroup(group);
         button2.setToggleGroup(group);
         button3.setToggleGroup(group);
         button1.setSelected(true);
-        System.out.println("radio0: "+group.getSelectedToggle());
 
         Button threeBuildings = new Button();
         Button fourBuildings = new Button();
@@ -59,7 +57,6 @@ public class Layout {
         fourBuildings.setText("4 Buildings");
         fiveBuildings.setText("5 Buildings");
 
-        /*----------------------------------------------------------------------------------*/
         /*---------- LEFT TEXT ----------*/
         Text rentToCollect = new Text("Rent to Collect: ");
         Text maintenance = new Text("Maintenance: ");
@@ -125,24 +122,17 @@ public class Layout {
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        /*----------------------------------------------------------------------------------*/
         /*---------- CONTROLLER STUFF ----------*/
-
-        controller.setActionBuildingCount(threeBuildings,3, BPane,center,buildings,buildButtons,group);
-        controller.setActionBuildingCount(fourBuildings,4, BPane,center,buildings,buildButtons,group);
-        controller.setActionBuildingCount(fiveBuildings,5, BPane,center,buildings,buildButtons,group);
-        controller.setActionNewMonth(newMonth, month);
-
-        controller.setActionBuild(buildButtons.get(0), buildings.get(0));
-        controller.setActionBuild(buildButtons.get(1), buildings.get(1));
-        controller.setActionBuild(buildButtons.get(2), buildings.get(2));
-
-        controller.setActionIncreaseRent(increaseRentButton, increaseRentTextfield);
+        controller.setActionBuildingCount(threeBuildings,3, BPane,center,buildings,buildButtons,group, funds, filled, rentToCollect, maintenance);
+        controller.setActionBuildingCount(fourBuildings,4, BPane,center,buildings,buildButtons,group, funds, filled, rentToCollect, maintenance);
+        controller.setActionBuildingCount(fiveBuildings,5, BPane,center,buildings,buildButtons,group, funds, filled, rentToCollect, maintenance);
+        controller.setActionBuild(buildButtons.get(0), buildings.get(0), buildings, funds);
+        controller.setActionBuild(buildButtons.get(1), buildings.get(1), buildings, funds);
+        controller.setActionBuild(buildButtons.get(2), buildings.get(2), buildings, funds);
+        controller.setActionIncreaseRent(increaseRentButton, increaseRentTextfield, buildings);
+        controller.setActionNewMonth(newMonth, month, buildings, funds, rentToCollect, maintenance);
 
     }
-
 }
-
-
 
 
